@@ -14,7 +14,7 @@ export default async function LinkDetailsPage({
 
     const { id: slug } = await params;
     const link = await getLink(slug);
-    if (!link) redirect("/home");
+    if (!link) redirect("/404");
     link.clicks = await getClicks(slug);
 
     return <SlugPage link={link} />;

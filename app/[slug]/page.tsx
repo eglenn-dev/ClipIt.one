@@ -10,7 +10,7 @@ export default async function Page({
     const { slug } = await params;
     const link = await getLink(slug);
     if (!link) {
-        redirect("/");
+        redirect("/404");
     }
     await logClick(link.slug);
     redirect(link.url);

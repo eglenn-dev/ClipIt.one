@@ -1,5 +1,6 @@
 import admin from "firebase-admin";
 import { validateUserKey } from "./accounts-model";
+import { RedirectLink } from "@/lib/interfaces";
 
 const serviceAccountString = process.env.FIREBASE_SERVICE_ACCOUNT;
 if (!serviceAccountString) {
@@ -19,13 +20,6 @@ if (!admin.apps.length) {
 
 const db = admin.database();
 const linksRef = db.ref("links");
-
-interface Link {
-    url: string;
-    slug: string;
-    userId: string;
-    createdAt: number;
-}
 
 export async function createLink(url: string, userId: string, slug?: string) {
     if (!(await validateUserKey(userId))) {
@@ -62,7 +56,37 @@ export async function generateUniqueSlug() {
 export async function getLink(slug: string) {
     const snapshot = await linksRef.orderByChild("slug").equalTo(slug).get();
     if (!snapshot.exists()) {
-        throw new Error("Link not found");
+        return null;
     }
-    return snapshot.val() as Link;
+    return Object.values(snapshot.val())[0] as RedirectLink;
+}
+
+export async function getKeyBySlug(slug: string) {
+    const snapshot = await linksRef.orderByChild("slug").equalTo(slug).get();
+    if (!snapshot.exists()) {
+        return null;
+    }
+    return Object.keys(snapshot.val())[0];
+}
+
+export async function getKeysByUserId(userId: string) {
+    const snapshot = await linksRef
+        .orderByChild("userId")
+        .equalTo(userId)
+        .get();
+    if (!snapshot.exists()) {
+        return [];
+    }
+    return Object.keys(snapshot.val());
+}
+
+export async function getLinksForUser(userId: string) {
+    const keys = await getKeysByUserId(userId);
+    if (!keys.length) return [];
+    const links: RedirectLink[] = [];
+    for (const key of keys) {
+        const snapshot = await linksRef.child(key).get();
+        links.push(snapshot.val() as RedirectLink);
+    }
+    return links.sort((a, b) => b.createdAt - a.createdAt);
 }

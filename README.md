@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+    <h1>ClipIt.one</h1> 
+    <img src="./public/web-app-manifest-512x512.png" height="100" width="100" alt="MarkNote.one logo" />
+    <p>Welcome to <b>ClipIt.one</b>, a simple and easy to use link shortening service, with basic link analytics implementation.</p>
+    <p>
+        <img alt="React" src="https://img.shields.io/badge/-React-61DAFB?style=flat-square&logo=react&logoColor=white" />
+        <img alt="TypeScript" src="https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" />
+        <img alt="Next.js" src="https://img.shields.io/badge/-Next.js-000000?style=flat-square&logo=next.js&logoColor=white" />
+        <img alt="Tailwind CSS" src="https://img.shields.io/badge/-Tailwind%20CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" />
+        <img alt="Firebase" src="https://img.shields.io/badge/-Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=white" />
+        <img alt="Vercel" src="https://img.shields.io/badge/-Vercel-000000?style=flat-square&logo=vercel&logoColor=white" />
+        <img alt="shadcn/ui" src="https://img.shields.io/badge/-shadcn/ui-000000?style=flat-square&logo=react&logoColor=white" />
+    </p>
+</div>
 
-## Getting Started
+## Features
 
-First, run the development server:
+-   **Link Shortening**: Shorten any URL with a single click.
+-   **Link Analytics**: View basic analytics for your shortened links.
+-   **Custom Short URLs**: Customize your shortened URLs.
+-   **QR Code Generation**: Generate QR codes automatically for easy sharing.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Installation
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Prerequisites
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+-   Node.js (v14.x or above)
+-   npm (v6.x or above)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Steps
 
-## Learn More
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/eglenn-dev/Clipit.one.git
+    ```
+2. Navigate to the project directory:
+    ```bash
+    cd ClipIt.one
+    ```
+3. Install dependencies:
+    ```bash
+    npm install
+    ```
+4. Start the application:
+    ```bash
+    npm run dev
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+## Usage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Open the app and start shortening links.
+2. Enter the URL you want to shorten in the input field.
+3. Click the "Shorten" button to generate a shortened link.
+4. Copy the shortened link and share it with others.
+5. Click the "Analytics" button to view basic analytics for your shortened link.
+6. Copy the auto generated QR code for easy sharing.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Acknowledgements
 
-## Deploy on Vercel
+While this project is primarily developed by Ethan Glenn, I would like to acknowledge the following resources that have been instrumental in its development:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+-   [React](https://react.dev/)
+-   [Next.js](https://nextjs.org/)
+-   [Tailwind CSS](https://tailwindcss.com/)
+-   [shadcn/ui](https://ui.shadcn.com/)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+Copyright © 2025 [Ethan Glenn](https://eglenn.dev). All rights reserved.

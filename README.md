@@ -1,6 +1,6 @@
 <div align="center">
     <h1>ClipIt.one</h1> 
-    <img src="./public/web-app-manifest-512x512.png" height="100" width="100" alt="MarkNote.one logo" />
+    <img src="./public/web-app-manifest-512x512.png" height="100" width="100" alt="ClipIt.one logo" />
     <p>Welcome to <b>ClipIt.one</b>, a simple and easy to use link shortening service, with basic link analytics implementation.</p>
     <p>
         <img alt="React" src="https://img.shields.io/badge/-React-61DAFB?style=flat-square&logo=react&logoColor=white" />

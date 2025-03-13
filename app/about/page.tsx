@@ -4,6 +4,12 @@ import { ArrowRight } from "lucide-react";
 import LandingHeader from "@/components/landing-header";
 import LandingFooter from "@/components/landing-footer";
 
+export const metadata = {
+    title: "About | ClipIt.one",
+    description:
+        "Learn more about ClipIt.one and our mission to simplify link management.",
+};
+
 export default function AboutPage() {
     return (
         <div className="flex flex-col min-h-screen">

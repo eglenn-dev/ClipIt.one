@@ -1,6 +1,10 @@
 import HomeHeader from "@/components/home-header";
 import SidePanel from "@/components/side-panel";
 
+export const metadata = {
+    title: "Dashboard | ClipIt.one",
+};
+
 export default function HomeLayout({
     children,
 }: {

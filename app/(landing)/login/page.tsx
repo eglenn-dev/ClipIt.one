@@ -3,8 +3,8 @@ import { redirect } from "next/navigation";
 import Login from "./login";
 
 export const metadata = {
-    title: "Login | MarkNote.one",
-    description: "Sign in to your MarkNote.one account",
+    title: "Login | ClipIt.one",
+    description: "Sign in to your ClipIt.one account to start shortening URLs",
 };
 
 export default async function LoginPage() {

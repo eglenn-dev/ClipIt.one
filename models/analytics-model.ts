@@ -59,3 +59,10 @@ export async function getClicksBySlugForUser(userId: string) {
     }
     return clicks as { [key: string]: number };
 }
+
+export async function deleteClicks(slug: string) {
+    const key = await getKeyBySlug(slug);
+    if (!key) return;
+    await analyticsRef.child(key).remove();
+    return;
+}

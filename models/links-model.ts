@@ -1,5 +1,6 @@
 import admin from "firebase-admin";
 import { validateUserKey } from "./accounts-model";
+import { deleteClicks } from "./analytics-model";
 import { RedirectLink } from "@/lib/interfaces";
 
 const serviceAccountString = process.env.FIREBASE_SERVICE_ACCOUNT;
@@ -89,4 +90,32 @@ export async function getLinksForUser(userId: string) {
         links.push(snapshot.val() as RedirectLink);
     }
     return links.sort((a, b) => b.createdAt - a.createdAt);
+}
+
+export async function updateUrl(slug: string, url: string) {
+    const key = await getKeyBySlug(slug);
+    if (!key) {
+        throw new Error("Link not found");
+    }
+    await linksRef.child(key).update({ url });
+}
+
+export async function updateSlug(slug: string, newSlug: string) {
+    if (!(await checkUniqueSlug(newSlug))) {
+        throw new Error("Slug is not unique");
+    }
+    const key = await getKeyBySlug(slug);
+    if (!key) {
+        throw new Error("Link not found");
+    }
+    await linksRef.child(key).update({ slug: newSlug });
+}
+
+export async function deleteLink(slug: string) {
+    const key = await getKeyBySlug(slug);
+    if (!key) {
+        throw new Error("Link not found");
+    }
+    await deleteClicks(slug);
+    await linksRef.child(key).remove();
 }

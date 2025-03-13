@@ -14,26 +14,34 @@ export default function LandingHeader() {
                     <Link2 className="h-6 w-6" />
                     <span>ClipIt.one</span>
                 </Link>
-                <nav className="hidden md:flex gap-6">
-                    <Link
-                        href="/#features"
-                        className="text-sm font-medium hover:underline underline-offset-4"
-                    >
-                        Features
-                    </Link>
-                    <Link
-                        href="/#faq"
-                        className="text-sm font-medium hover:underline underline-offset-4"
-                    >
-                        FAQ
-                    </Link>
-                </nav>
                 <div className="flex items-center gap-4">
+                    <nav className="hidden md:flex gap-6">
+                        <Link
+                            href="/#features"
+                            className="text-sm font-medium hover:underline underline-offset-4"
+                        >
+                            Features
+                        </Link>
+                        <Link
+                            href="/#faq"
+                            className="text-sm font-medium hover:underline underline-offset-4"
+                        >
+                            FAQ
+                        </Link>
+                        <Link
+                            href="/about"
+                            className="text-sm font-medium hover:underline underline-offset-4"
+                        >
+                            About
+                        </Link>
+                    </nav>
                     <Link href="/signup">
-                        <Button variant="outline">Sign Up</Button>
+                        <Button variant="outline" className="cursor-pointer">
+                            Sign Up
+                        </Button>
                     </Link>
                     <Link href="/home">
-                        <Button>Dashboard</Button>
+                        <Button className="cursor-pointer">Dashboard</Button>
                     </Link>
                 </div>
             </div>

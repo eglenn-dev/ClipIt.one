@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import QRCodeComponent from "@/components/qr-code";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -10,7 +10,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { ArrowLeft, Copy, Download, QrCode } from "lucide-react";
+import { ArrowLeft, Copy, Download, QrCode, Trash2Icon } from "lucide-react";
 import {
     Select,
     SelectContent,
@@ -18,7 +18,19 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import type { RedirectLink } from "@/lib/interfaces";
+import { updateUrlAction, updateSlugAction, deleteLinkAction } from "./action";
 
 interface SlugPageProps {
     link: RedirectLink;
@@ -27,6 +39,10 @@ interface SlugPageProps {
 export default function SlugPage({ link }: SlugPageProps) {
     const [urlCode, setUrlCode] = useState("");
     const [timeRange, setTimeRange] = useState("allTime");
+    const [isEditingSlug, setIsEditingSlug] = useState(false);
+    const [editedSlug, setEditedSlug] = useState(link.slug);
+    const [currentSlug, setCurrentSlug] = useState(link.slug);
+    const [currentUrl, setCurrentUrl] = useState(link.url);
     const numberActiveDays = Math.floor(
         (new Date().getTime() - new Date(link.createdAt).getTime()) /
             (1000 * 60 * 60 * 24)
@@ -59,9 +75,6 @@ export default function SlugPage({ link }: SlugPageProps) {
             startDate = new Date(now);
             startDate.setDate(now.getDate() - 90);
         }
-
-        // For a real implementation, you would filter clicks from your database
-        // This is a simplified version that estimates filtered clicks
         const totalDays = Math.floor(
             (now.getTime() - new Date(link.createdAt).getTime()) /
                 (1000 * 60 * 60 * 24)
@@ -69,13 +82,9 @@ export default function SlugPage({ link }: SlugPageProps) {
         const filteredDays = Math.floor(
             (now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
         );
-
-        // If we don't have enough history for the selected range, return all clicks
         if (filteredDays >= totalDays) {
             return link.clicks || 0;
         }
-
-        // Estimate clicks for the time period (assuming uniform distribution)
         return Math.round((link.clicks || 0) * (filteredDays / totalDays));
     };
 
@@ -91,9 +100,33 @@ export default function SlugPage({ link }: SlugPageProps) {
         return Math.max(1, numberActiveDays);
     };
 
-    useEffect(() => {
-        console.log(urlCode);
-    }, [urlCode]);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedUrl, setEditedUrl] = useState(link.url);
+
+    const updateUrl = async (e: React.FormEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (editedUrl === currentUrl) {
+            setIsEditing(false);
+            return;
+        }
+        await updateUrlAction(currentSlug, editedUrl);
+        setCurrentUrl(editedUrl);
+        setIsEditingSlug(false);
+    };
+
+    const updateSlug = async (e: React.FormEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (editedSlug === currentSlug) {
+            setIsEditingSlug(false);
+            return;
+        }
+        await updateSlugAction(currentSlug, editedSlug);
+        setCurrentSlug(editedSlug);
+        setIsEditingSlug(false);
+        window.history.replaceState(null, "", `/home/${editedSlug}`);
+    };
 
     return (
         <div className="flex flex-col gap-4 md:gap-8">
@@ -114,21 +147,134 @@ export default function SlugPage({ link }: SlugPageProps) {
                         <div>
                             <CardTitle className="flex items-center gap-2">
                                 <a
-                                    href={`https://ClipIt.one/${link.slug}`}
-                                    target="_blank"
+                                    href={
+                                        isEditingSlug
+                                            ? "#"
+                                            : `https://clipit.one/${currentSlug}`
+                                    }
+                                    target={isEditingSlug ? "_self" : "_blank"}
                                     rel="noreferrer"
                                 >
-                                    <Button
-                                        variant="link"
-                                        className="p-0 underline text-lg cursor-pointer"
-                                    >
-                                        https://ClipIt.one/
-                                        {link.slug}
-                                    </Button>
+                                    <div className="flex items-center">
+                                        <Button
+                                            variant="link"
+                                            className="p-0 underline text-lg cursor-pointer gap-0"
+                                        >
+                                            https://ClipIt.one/
+                                            {!isEditingSlug ? (
+                                                <span>{currentSlug}</span>
+                                            ) : (
+                                                <input
+                                                    type="text"
+                                                    value={editedSlug}
+                                                    onChange={(e) =>
+                                                        setEditedSlug(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    className="w-20 px-1 border rounded-md text-base"
+                                                    autoFocus
+                                                    onClick={(e) =>
+                                                        e.stopPropagation()
+                                                    }
+                                                />
+                                            )}
+                                        </Button>
+                                        {isEditingSlug ? (
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="ml-2 h-7"
+                                                onClick={updateSlug}
+                                            >
+                                                Save
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-6 w-6 p-0 ml-1"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    setIsEditingSlug(true);
+                                                }}
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    className="h-4 w-4"
+                                                >
+                                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                                                    <path d="m15 5 4 4" />
+                                                </svg>
+                                                <span className="sr-only">
+                                                    Edit Slug
+                                                </span>
+                                            </Button>
+                                        )}
+                                    </div>
                                 </a>
                             </CardTitle>
-                            <CardDescription className="line-clamp-1">
-                                {link.url}
+                            <CardDescription className="flex items-center gap-2">
+                                {isEditing ? (
+                                    <>
+                                        <input
+                                            type="text"
+                                            value={editedUrl}
+                                            onChange={(e) =>
+                                                setEditedUrl(e.target.value)
+                                            }
+                                            className="flex-1 min-w-0 px-2 py-1 border rounded-md"
+                                            autoFocus
+                                        />
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={updateUrl}
+                                        >
+                                            Save
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className="line-clamp-1 flex-1">
+                                            {currentUrl}
+                                        </span>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="h-6 w-6 p-0"
+                                            onClick={() => setIsEditing(true)}
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                className="h-4 w-4"
+                                            >
+                                                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                                                <path d="m15 5 4 4" />
+                                            </svg>
+                                            <span className="sr-only">
+                                                Edit URL
+                                            </span>
+                                        </Button>
+                                    </>
+                                )}
                             </CardDescription>
                         </div>
                         <div className="flex flex-wrap gap-2">
@@ -138,7 +284,11 @@ export default function SlugPage({ link }: SlugPageProps) {
                                 className="cursor-pointer"
                                 onClick={() =>
                                     copyToClipboard(
-                                        `https://ClipIt.one/${link.slug}`
+                                        `https://ClipIt.one/${
+                                            isEditingSlug
+                                                ? editedSlug
+                                                : currentSlug
+                                        }`
                                     )
                                 }
                             >
@@ -155,6 +305,38 @@ export default function SlugPage({ link }: SlugPageProps) {
                                     QR Code
                                 </Button>
                             </Link>
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button variant="destructive" size="sm">
+                                        <Trash2Icon className="mr-2 h-4 w-4" />
+                                        Delete
+                                    </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>
+                                            Are you absolutely sure?
+                                        </AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            This action cannot be undone. This
+                                            will permanently delete your link,
+                                            and all associated analytics data.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>
+                                            Cancel
+                                        </AlertDialogCancel>
+                                        <AlertDialogAction
+                                            onClick={() =>
+                                                deleteLinkAction(currentSlug)
+                                            }
+                                        >
+                                            Delete
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
                         </div>
                     </div>
                 </CardHeader>
@@ -238,7 +420,7 @@ export default function SlugPage({ link }: SlugPageProps) {
                     <div className="flex h-[200px] w-[200px] items-center justify-center rounded-md border">
                         <QRCodeComponent
                             size={1000}
-                            url={`https://clipit.one/${link.slug}`}
+                            url={`https://clipit.one/${currentSlug}`}
                             urlCode={setUrlCode}
                         />
                     </div>
@@ -250,7 +432,9 @@ export default function SlugPage({ link }: SlugPageProps) {
                                 const downloadLink =
                                     document.createElement("a");
                                 downloadLink.href = urlCode;
-                                downloadLink.download = `ClipIt_${link.slug}.png`;
+                                downloadLink.download = `ClipIt_${
+                                    isEditingSlug ? editedSlug : currentSlug
+                                }.png`;
                                 downloadLink.click();
                             }}
                             disabled={!urlCode}

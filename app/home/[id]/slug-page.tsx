@@ -160,7 +160,7 @@ export default function SlugPage({ link }: SlugPageProps) {
                                             variant="link"
                                             className="p-0 underline text-lg cursor-pointer gap-0"
                                         >
-                                            https://ClipIt.one/
+                                            https://clipit.one/
                                             {!isEditingSlug ? (
                                                 <span>{currentSlug}</span>
                                             ) : (

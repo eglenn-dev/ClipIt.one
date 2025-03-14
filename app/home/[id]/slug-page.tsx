@@ -43,6 +43,8 @@ export default function SlugPage({ link }: SlugPageProps) {
     const [editedSlug, setEditedSlug] = useState(link.slug);
     const [currentSlug, setCurrentSlug] = useState(link.slug);
     const [currentUrl, setCurrentUrl] = useState(link.url);
+    const [error, setError] = useState("");
+    const [editLoading, setEditLoading] = useState(false);
     const numberActiveDays = Math.floor(
         (new Date().getTime() - new Date(link.createdAt).getTime()) /
             (1000 * 60 * 60 * 24)
@@ -106,26 +108,52 @@ export default function SlugPage({ link }: SlugPageProps) {
     const updateUrl = async (e: React.FormEvent) => {
         e.preventDefault();
         e.stopPropagation();
+        setEditLoading(false);
         if (editedUrl === currentUrl) {
             setIsEditing(false);
             return;
         }
+        try {
+            new URL(editedUrl);
+        } catch (error) {
+            setError("Invalid URL");
+            console.log(error);
+            return;
+        }
+        setError("");
+        setEditLoading(true);
         await updateUrlAction(currentSlug, editedUrl);
         setCurrentUrl(editedUrl);
         setIsEditingSlug(false);
+        setEditLoading(false);
     };
 
     const updateSlug = async (e: React.FormEvent) => {
         e.preventDefault();
         e.stopPropagation();
+        setEditLoading(false);
         if (editedSlug === currentSlug) {
             setIsEditingSlug(false);
             return;
         }
+        const urlPattern = /^[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+$/;
+        if (!urlPattern.test(editedSlug)) {
+            setError("Slug contains unsupported characters");
+            return;
+        } else if (editedSlug.length < 3) {
+            setError("Slug must be at least 3 characters long");
+            return;
+        } else if (editedSlug.length > 50) {
+            setError("Slug must be at most 50 characters long");
+            return;
+        }
+        setError("");
+        setEditLoading(true);
         await updateSlugAction(currentSlug, editedSlug);
         setCurrentSlug(editedSlug);
         setIsEditingSlug(false);
         window.history.replaceState(null, "", `/home/${editedSlug}`);
+        setEditLoading(false);
     };
 
     return (
@@ -156,6 +184,11 @@ export default function SlugPage({ link }: SlugPageProps) {
                                     rel="noreferrer"
                                 >
                                     <div className="flex items-center">
+                                        {error && (
+                                            <span className="text-red-500">
+                                                {error}
+                                            </span>
+                                        )}
                                         <Button
                                             variant="link"
                                             className="p-0 underline text-lg cursor-pointer gap-0"
@@ -172,7 +205,7 @@ export default function SlugPage({ link }: SlugPageProps) {
                                                             e.target.value
                                                         )
                                                     }
-                                                    className="w-20 px-1 border rounded-md text-base"
+                                                    className="w-40 px-1 border rounded-md text-base"
                                                     autoFocus
                                                     onClick={(e) =>
                                                         e.stopPropagation()
@@ -186,8 +219,11 @@ export default function SlugPage({ link }: SlugPageProps) {
                                                 size="sm"
                                                 className="ml-2 h-7"
                                                 onClick={updateSlug}
+                                                disabled={editLoading}
                                             >
-                                                Save
+                                                {editLoading
+                                                    ? "Saving"
+                                                    : "Save"}
                                             </Button>
                                         ) : (
                                             <Button
@@ -232,15 +268,16 @@ export default function SlugPage({ link }: SlugPageProps) {
                                             onChange={(e) =>
                                                 setEditedUrl(e.target.value)
                                             }
-                                            className="flex-1 min-w-0 px-2 py-1 border rounded-md"
+                                            className="flex-1 min-w-0 px-2 py-1 border rounded-md w-56"
                                             autoFocus
                                         />
                                         <Button
                                             variant="outline"
                                             size="sm"
                                             onClick={updateUrl}
+                                            disabled={editLoading}
                                         >
-                                            Save
+                                            {editLoading ? "Saving" : "Save"}
                                         </Button>
                                     </>
                                 ) : (
@@ -307,7 +344,7 @@ export default function SlugPage({ link }: SlugPageProps) {
                             </Link>
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
-                                    <Button variant="destructive" size="sm">
+                                    <Button variant="outline" size="sm">
                                         <Trash2Icon className="mr-2 h-4 w-4" />
                                         Delete
                                     </Button>

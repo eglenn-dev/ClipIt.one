@@ -13,5 +13,5 @@ export async function createLinkAction(url: string, slug?: string) {
 export async function checkSlugAvailabilityAction(slug: string) {
     const session = await getSession();
     if (!session) return;
-    return !(await checkUniqueSlug(slug));
+    return await checkUniqueSlug(slug);
 }

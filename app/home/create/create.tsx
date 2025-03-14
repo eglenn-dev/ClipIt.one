@@ -28,6 +28,11 @@ export default function CreatePage() {
             setError("URL is required");
             return;
         }
+        const urlPattern = /^[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+$/;
+        if (!urlPattern.test(url)) {
+            setError("URL contains unsupported characters");
+            return;
+        }
         try {
             new URL(url);
         } catch (error) {
@@ -39,8 +44,9 @@ export default function CreatePage() {
             setError("No custom slug provided");
             return;
         }
-        if (useCustomSlug && (await checkSlugAvailabilityAction(customSlug))) {
-            setError("Slug is not unique");
+        const isAvailable = await checkSlugAvailabilityAction(customSlug);
+        if (useCustomSlug && !isAvailable) {
+            setError("That slug is already taken");
             return;
         }
         setLoading(true);
@@ -51,11 +57,22 @@ export default function CreatePage() {
     useEffect(() => {
         const handler = setTimeout(async () => {
             if (useCustomSlug && customSlug) {
+                const urlPattern = /^[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+$/;
+                if (!urlPattern.test(customSlug)) {
+                    setError("Slug contains unsupported characters");
+                    return;
+                } else if (customSlug.length < 3) {
+                    setError("Slug must be at least 3 characters long");
+                    return;
+                } else if (customSlug.length > 50) {
+                    setError("Slug must be at most 50 characters long");
+                    return;
+                }
                 const isAvailable = await checkSlugAvailabilityAction(
                     customSlug
                 );
                 if (!isAvailable) {
-                    setError("Slug is not unique");
+                    setError("That slug is already taken");
                 } else {
                     setError("");
                 }

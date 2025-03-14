@@ -63,7 +63,7 @@ export default function SlugSkeleton() {
                                 <QrCode className="mr-2 h-4 w-4" />
                                 QR Code
                             </Button>
-                            <Button variant="destructive" size="sm" disabled>
+                            <Button variant="outline" size="sm" disabled>
                                 <Trash2Icon className="mr-2 h-4 w-4" />
                                 Delete
                             </Button>

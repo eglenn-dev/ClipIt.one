@@ -38,7 +38,7 @@ export default function SidePanel() {
                     Create Link
                 </Link>
             </nav>
-            <div className="p-4 fixed bottom-0 w-full grid gap-2">
+            <div className="p-4 fixed bottom-0 w-fit grid gap-2">
                 <Link href="/home/settings">
                     <Button
                         type="submit"

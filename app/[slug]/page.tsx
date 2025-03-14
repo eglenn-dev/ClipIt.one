@@ -1,6 +1,7 @@
 import { getLink } from "@/models/links-model";
 import { logClick } from "@/models/analytics-model";
 import { redirect } from "next/navigation";
+import { getSession } from "@/lib/session";
 
 export default async function Page({
     params,
@@ -12,6 +13,7 @@ export default async function Page({
     if (!link) {
         redirect("/404");
     }
-    await logClick(link.slug);
+    const session = await getSession();
+    if (!session) await logClick(link.slug);
     redirect(link.url);
 }

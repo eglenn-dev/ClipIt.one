@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import Signup from "./signup";
 
 export const metadata = {
-    title: "Signup | ClipIt.one",
+    title: "Sign Up | ClipIt.one",
     description: "Create an account on ClipIt.one to start shortening URLs",
 };
 

@@ -6,6 +6,10 @@ import { Suspense } from "react";
 import SlugPage from "./slug-page";
 import SlugSkeleton from "./slug-skeleton";
 
+export const metadata = {
+    title: "Edit Link | ClipIt.one",
+};
+
 export default async function Page({
     params,
 }: {

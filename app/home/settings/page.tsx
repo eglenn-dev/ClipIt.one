@@ -9,6 +9,10 @@ import Settings from "./settings";
 import { Suspense } from "react";
 import SettingsSkeleton from "./setting-skeleton";
 
+export const metadata = {
+    title: "Account Settings | ClipIt.one",
+};
+
 interface User {
     user: {
         userId: string;

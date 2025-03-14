@@ -136,11 +136,14 @@ export default function SlugPage({ link }: SlugPageProps) {
             setIsEditingSlug(false);
             return;
         }
-        const urlPattern = /^[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+$/;
-        if (!urlPattern.test(editedSlug)) {
-            setError("Slug contains unsupported characters");
+        try {
+            new URL(`https://clipit.one/${editedSlug}`);
+        } catch (error) {
+            setError("Invalid slug");
+            console.log(error);
             return;
-        } else if (editedSlug.length < 3) {
+        }
+        if (editedSlug.length < 3) {
             setError("Slug must be at least 3 characters long");
             return;
         } else if (editedSlug.length > 50) {
@@ -202,7 +205,7 @@ export default function SlugPage({ link }: SlugPageProps) {
                                                     value={editedSlug}
                                                     onChange={(e) =>
                                                         setEditedSlug(
-                                                            e.target.value
+                                                            e.target.value.trim()
                                                         )
                                                     }
                                                     className="w-40 px-1 border rounded-md text-base"
@@ -268,7 +271,7 @@ export default function SlugPage({ link }: SlugPageProps) {
                                             onChange={(e) =>
                                                 setEditedUrl(e.target.value)
                                             }
-                                            className="flex-1 min-w-0 px-2 py-1 border rounded-md w-56"
+                                            className="flex-1 min-w-0 px-2 py-1 border rounded-md w-36"
                                             autoFocus
                                         />
                                         <Button
@@ -282,7 +285,7 @@ export default function SlugPage({ link }: SlugPageProps) {
                                     </>
                                 ) : (
                                     <>
-                                        <span className="line-clamp-1 flex-1">
+                                        <span className="line-clamp-1 flex-1 max-w-36">
                                             {currentUrl}
                                         </span>
                                         <Button

@@ -28,11 +28,6 @@ export default function CreatePage() {
             setError("URL is required");
             return;
         }
-        const urlPattern = /^[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+$/;
-        if (!urlPattern.test(url)) {
-            setError("URL contains unsupported characters");
-            return;
-        }
         try {
             new URL(url);
         } catch (error) {
@@ -57,11 +52,14 @@ export default function CreatePage() {
     useEffect(() => {
         const handler = setTimeout(async () => {
             if (useCustomSlug && customSlug) {
-                const urlPattern = /^[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]+$/;
-                if (!urlPattern.test(customSlug)) {
-                    setError("Slug contains unsupported characters");
+                try {
+                    new URL(`https://clipit.one/${customSlug}`);
+                } catch (error) {
+                    setError("Invalid slug format");
+                    console.log(error);
                     return;
-                } else if (customSlug.length < 3) {
+                }
+                if (customSlug.length < 3) {
                     setError("Slug must be at least 3 characters long");
                     return;
                 } else if (customSlug.length > 50) {
@@ -130,7 +128,10 @@ export default function CreatePage() {
                                 id="slug"
                                 placeholder="my-custom-slug"
                                 disabled={!useCustomSlug}
-                                onChange={(e) => setCustomSlug(e.target.value)}
+                                value={customSlug}
+                                onChange={(e) =>
+                                    setCustomSlug(e.target.value.trim())
+                                }
                             />
                         </div>
                     </div>

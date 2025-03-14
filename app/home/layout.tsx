@@ -2,6 +2,7 @@ import HomeHeader from "@/components/home-header";
 import SidePanel from "@/components/side-panel";
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata = {
     title: "Dashboard | ClipIt.one",
@@ -21,6 +22,7 @@ export default async function HomeLayout({
                 <SidePanel />
                 <main className="flex-1 p-4 md:p-6">{children}</main>
             </div>
+            <Toaster />
         </div>
     );
 }

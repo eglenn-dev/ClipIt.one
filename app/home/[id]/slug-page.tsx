@@ -3,6 +3,7 @@ import Link from "next/link";
 import QRCodeComponent from "@/components/qr-code";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
     Card,
     CardContent,
@@ -56,9 +57,11 @@ export default function SlugPage({ link }: SlugPageProps) {
         navigator.clipboard.writeText(text).then(
             () => {
                 console.log("Text copied to clipboard");
+                toast("Link has been copied to your clipboard.");
             },
             (err) => {
                 console.error("Could not copy text: ", err);
+                toast("Failed to copy link to clipboard.");
             }
         );
     };
@@ -271,7 +274,7 @@ export default function SlugPage({ link }: SlugPageProps) {
                                             onChange={(e) =>
                                                 setEditedUrl(e.target.value)
                                             }
-                                            className="flex-1 min-w-0 px-2 py-1 border rounded-md w-36"
+                                            className="flex-1 min-w-0 px-2 py-1 border rounded-md w-44"
                                             autoFocus
                                         />
                                         <Button
@@ -285,7 +288,7 @@ export default function SlugPage({ link }: SlugPageProps) {
                                     </>
                                 ) : (
                                     <>
-                                        <span className="line-clamp-1 flex-1 max-w-36">
+                                        <span className="line-clamp-1 flex-1 max-w-44">
                                             {currentUrl}
                                         </span>
                                         <Button
@@ -448,6 +451,10 @@ export default function SlugPage({ link }: SlugPageProps) {
                         </div>
                     </CardContent>
                 </Card>
+            </div>
+            <div className="text-sm text-gray-500">
+                Note that clicks do not include times you open the link from a
+                device you are singed in on.
             </div>
             <Card id="qr-code">
                 <CardHeader>

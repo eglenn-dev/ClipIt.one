@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
     Card,
     CardContent,
@@ -22,9 +23,11 @@ export default function Home({ links }: HomeProps) {
         navigator.clipboard.writeText(text).then(
             () => {
                 console.log("Text copied to clipboard");
+                toast("Link copied to clipboard");
             },
             (err) => {
                 console.error("Could not copy text: ", err);
+                toast("Failed to copy link to clipboard");
             }
         );
     };

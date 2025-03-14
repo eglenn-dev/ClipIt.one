@@ -154,14 +154,6 @@ export default function Home({ links }: HomeProps) {
                     <p className="text-sm text-muted-foreground">
                         Showing {links.length} links
                     </p>
-                    <div className="flex gap-1">
-                        <Button variant="outline" size="sm" disabled>
-                            Previous
-                        </Button>
-                        <Button variant="outline" size="sm" disabled>
-                            Next
-                        </Button>
-                    </div>
                 </CardFooter>
             </Card>
         </div>

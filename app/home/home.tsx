@@ -108,7 +108,7 @@ export default function Home({ links }: HomeProps) {
                                                 {link.slug}
                                             </span>
                                         </div>
-                                        <div className="text-sm text-muted-foreground line-clamp-1">
+                                        <div className="text-sm text-muted-foreground line-clamp-1 max-w-52">
                                             {link.url}
                                         </div>
                                     </Link>

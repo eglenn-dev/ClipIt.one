@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useState, useEffect } from "react";
 import {
     Card,
     CardContent,
@@ -19,6 +20,9 @@ interface HomeProps {
 }
 
 export default function Home({ links }: HomeProps) {
+    const [filteredLinks, setFilteredLinks] = useState<RedirectLink[]>(links);
+    const [searchQuery, setSearchQuery] = useState("");
+
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text).then(
             () => {
@@ -31,6 +35,18 @@ export default function Home({ links }: HomeProps) {
             }
         );
     };
+
+    useEffect(() => {
+        setFilteredLinks(
+            links.filter(
+                (link) =>
+                    link.slug
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase()) ||
+                    link.url.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        );
+    }, [searchQuery, links]);
 
     return (
         <div className="flex flex-col gap-4 md:gap-8">
@@ -80,6 +96,8 @@ export default function Home({ links }: HomeProps) {
                             type="search"
                             placeholder="Search links..."
                             className="w-[200px] pl-8 md:w-[250px]"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
                 </div>
@@ -93,7 +111,7 @@ export default function Home({ links }: HomeProps) {
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">
-                        {links.map((link) => (
+                        {filteredLinks.map((link) => (
                             <div
                                 key={link.slug}
                                 className="rounded-lg border p-4"

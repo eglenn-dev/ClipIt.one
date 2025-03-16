@@ -327,7 +327,7 @@ export default function SlugPage({ link }: SlugPageProps) {
                                 className="cursor-pointer"
                                 onClick={() =>
                                     copyToClipboard(
-                                        `https://ClipIt.one/${
+                                        `https://clipit.one/${
                                             isEditingSlug
                                                 ? editedSlug
                                                 : currentSlug

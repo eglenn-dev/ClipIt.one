@@ -30,6 +30,7 @@ export default function Login() {
                         className="mt-8 space-y-6"
                         onSubmit={(e) => {
                             e.preventDefault();
+                            setError("");
                             if (loading) return;
                             if (email === "" || password === "") {
                                 setError("Please fill in all fields");

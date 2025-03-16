@@ -24,8 +24,10 @@ export default function CreatePage() {
     const [loading, setLoading] = useState(false);
 
     const handleCreateLink = async () => {
+        setLoading(true);
         if (!url) {
             setError("URL is required");
+            setLoading(false);
             return;
         }
         try {
@@ -33,18 +35,20 @@ export default function CreatePage() {
         } catch (error) {
             console.log(error);
             setError("Invalid URL");
+            setLoading(false);
             return;
         }
         if (useCustomSlug && !customSlug) {
             setError("No custom slug provided");
+            setLoading(false);
             return;
         }
         const isAvailable = await checkSlugAvailabilityAction(customSlug);
         if (useCustomSlug && !isAvailable) {
             setError("That slug is already taken");
+            setLoading(false);
             return;
         }
-        setLoading(true);
         setError("");
         await createLinkAction(url, customSlug);
     };

@@ -1,6 +1,6 @@
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
-import { getLinksForUser } from "@/models/links-model";
+import { getLinksForUser, linkLimitReached } from "@/models/links-model";
 import { RedirectLink } from "@/lib/interfaces";
 import { getClicks } from "@/models/analytics-model";
 import { Suspense } from "react";
@@ -23,6 +23,6 @@ async function HomePageWrapper(userId: string) {
     for (const link of links) {
         link.clicks = await getClicks(link.slug);
     }
-
-    return <Home links={links} />;
+    const limitReached = await linkLimitReached(userId);
+    return <Home links={links} limitReached={limitReached} />;
 }

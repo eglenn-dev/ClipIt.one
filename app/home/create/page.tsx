@@ -1,5 +1,6 @@
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
+import { linkLimitReached } from "@/models/links-model";
 import CreatePage from "./create";
 
 export const metadata = {
@@ -9,6 +10,6 @@ export const metadata = {
 export default async function CreateLinkPage() {
     const session = await getSession();
     if (!session) redirect("/login");
-
-    return <CreatePage />;
+    const limitReached = await linkLimitReached(session.user.userId);
+    return <CreatePage limitReached={limitReached} />;
 }

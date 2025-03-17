@@ -119,3 +119,8 @@ export async function deleteLink(slug: string) {
     await deleteClicks(slug);
     await linksRef.child(key).remove();
 }
+
+export async function linkLimitReached(userId: string) {
+    const links = await getLinksForUser(userId);
+    return links.length >= 40;
+}

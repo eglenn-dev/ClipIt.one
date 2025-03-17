@@ -16,7 +16,11 @@ import { ArrowLeft } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { createLinkAction, checkSlugAvailabilityAction } from "./action";
 
-export default function CreatePage() {
+interface CreatePageProps {
+    limitReached: boolean;
+}
+
+export default function CreatePage({ limitReached }: CreatePageProps) {
     const [url, setUrl] = useState("");
     const [customSlug, setCustomSlug] = useState("");
     const [useCustomSlug, setUseCustomSlug] = useState(false);
@@ -85,6 +89,38 @@ export default function CreatePage() {
             clearTimeout(handler);
         };
     }, [customSlug, useCustomSlug]);
+
+    if (limitReached) {
+        return (
+            <div className="flex flex-col gap-4 md:gap-8">
+                <div className="flex items-center gap-2">
+                    <Link href="/home">
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <ArrowLeft className="h-4 w-4" />
+                            <span className="sr-only">Back</span>
+                        </Button>
+                    </Link>
+                    <h1 className="text-2xl font-bold tracking-tight">
+                        Create Link
+                    </h1>
+                </div>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Create a New Link</CardTitle>
+                        <CardDescription>
+                            You have reached the maximum number of links
+                            allowed.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardFooter>
+                        <Link href="/home">
+                            <Button variant="outline">Back</Button>
+                        </Link>
+                    </CardFooter>
+                </Card>
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col gap-4 md:gap-8">

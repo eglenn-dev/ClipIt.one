@@ -17,9 +17,10 @@ import { RedirectLink } from "@/lib/interfaces";
 
 interface HomeProps {
     links: RedirectLink[];
+    limitReached: boolean;
 }
 
-export default function Home({ links }: HomeProps) {
+export default function Home({ links, limitReached }: HomeProps) {
     const [filteredLinks, setFilteredLinks] = useState<RedirectLink[]>(links);
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -70,6 +71,13 @@ export default function Home({ links }: HomeProps) {
                     <CardContent>
                         <div className="text-2xl font-bold">{links.length}</div>
                     </CardContent>
+                    {limitReached && (
+                        <CardFooter>
+                            <p className="text-sm text-red-500">
+                                You have reached the limit of 40 links
+                            </p>
+                        </CardFooter>
+                    )}
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

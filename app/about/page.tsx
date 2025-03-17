@@ -243,7 +243,7 @@ export default function AboutPage() {
                             </p>
                         </div>
                         <div className="flex flex-col gap-2 min-[400px]:flex-row lg:justify-end">
-                            <Link href="/dashboard">
+                            <Link href="/home">
                                 <Button className="px-8">
                                     Get Started
                                     <ArrowRight className="ml-2 h-4 w-4" />

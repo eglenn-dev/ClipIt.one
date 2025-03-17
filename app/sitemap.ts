@@ -17,13 +17,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
         {
             url: "https://clipit.com/login",
             lastModified: new Date(),
-            changeFrequency: "weekly",
+            changeFrequency: "monthly",
             priority: 0.5,
         },
         {
             url: "https://clipit.com/signup",
             lastModified: new Date(),
-            changeFrequency: "weekly",
+            changeFrequency: "monthly",
             priority: 0.4,
         },
     ];

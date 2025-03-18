@@ -4,4 +4,5 @@ export interface RedirectLink {
     userId: string;
     createdAt: number;
     clicks?: number;
+    loadingScreen?: boolean;
 }

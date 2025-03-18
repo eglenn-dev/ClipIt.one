@@ -1,9 +1,17 @@
 "use client";
 import Link from "next/link";
 import QRCodeComponent from "@/components/qr-code";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { updateLoadingScreenAction } from "./action";
+import {
+    HoverCard,
+    HoverCardTrigger,
+    HoverCardContent,
+} from "@radix-ui/react-hover-card";
 import {
     Card,
     CardContent,
@@ -46,6 +54,9 @@ export default function SlugPage({ link }: SlugPageProps) {
     const [currentUrl, setCurrentUrl] = useState(link.url);
     const [error, setError] = useState("");
     const [editLoading, setEditLoading] = useState(false);
+    const [loadingScreen, setLoadingScreen] = useState(
+        link.loadingScreen || false
+    );
     const numberActiveDays = Math.floor(
         (new Date().getTime() - new Date(link.createdAt).getTime()) /
             (1000 * 60 * 60 * 24)
@@ -161,6 +172,14 @@ export default function SlugPage({ link }: SlugPageProps) {
         window.history.replaceState(null, "", `/home/${editedSlug}`);
         setEditLoading(false);
     };
+
+    useEffect(() => {
+        const updateLoadingScreen = async () => {
+            if (loadingScreen === link.loadingScreen) return;
+            await updateLoadingScreenAction(currentSlug, loadingScreen);
+        };
+        updateLoadingScreen();
+    }, [link, currentSlug, loadingScreen]);
 
     return (
         <div className="flex flex-col gap-4 md:gap-8">
@@ -321,6 +340,35 @@ export default function SlugPage({ link }: SlugPageProps) {
                             </CardDescription>
                         </div>
                         <div className="flex flex-wrap gap-2">
+                            <div className="flex items-center space-x-2">
+                                <Switch
+                                    defaultChecked={link.loadingScreen}
+                                    onClick={() =>
+                                        setLoadingScreen(!loadingScreen)
+                                    }
+                                />
+                                <Label htmlFor="loading-screen">
+                                    Use loading screen
+                                </Label>
+                                <HoverCard>
+                                    <HoverCardTrigger>
+                                        <Button
+                                            variant="secondary"
+                                            size="icon"
+                                            className="h-6 w-6 rounded-full border"
+                                        >
+                                            i
+                                        </Button>
+                                    </HoverCardTrigger>
+                                    <HoverCardContent>
+                                        <p>
+                                            Enable this option to use a loading
+                                            screen when the link is clicked.
+                                            This slows down link redirect time.
+                                        </p>
+                                    </HoverCardContent>
+                                </HoverCard>
+                            </div>
                             <Button
                                 variant="outline"
                                 size="sm"

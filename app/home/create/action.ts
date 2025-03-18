@@ -3,10 +3,19 @@ import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { createLink, checkUniqueSlug } from "@/models/links-model";
 
-export async function createLinkAction(url: string, slug?: string) {
+export async function createLinkAction(
+    url: string,
+    slug?: string,
+    loadingScreen?: boolean
+) {
     const session = await getSession();
     if (!session) redirect("/login");
-    const generatedSlug = await createLink(url, session.user.userId, slug);
+    const generatedSlug = await createLink(
+        url,
+        session.user.userId,
+        slug,
+        loadingScreen
+    );
     return redirect(`/home/${generatedSlug}`);
 }
 

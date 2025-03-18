@@ -22,7 +22,12 @@ if (!admin.apps.length) {
 const db = admin.database();
 const linksRef = db.ref("links");
 
-export async function createLink(url: string, userId: string, slug?: string) {
+export async function createLink(
+    url: string,
+    userId: string,
+    slug?: string,
+    loadingScreen?: boolean
+) {
     if (!(await validateUserKey(userId))) {
         throw new Error("Invalid user key");
     }
@@ -37,6 +42,7 @@ export async function createLink(url: string, userId: string, slug?: string) {
         slug,
         userId,
         createdAt: Date.now(),
+        loadingScreen,
     });
     return slug;
 }
@@ -118,6 +124,15 @@ export async function deleteLink(slug: string) {
     }
     await deleteClicks(slug);
     await linksRef.child(key).remove();
+}
+
+export async function updateLoadingScreen(
+    slug: string,
+    loadingScreen: boolean
+) {
+    const key = await getKeyBySlug(slug);
+    if (!key) throw new Error("Link not found");
+    await linksRef.child(key).update({ loadingScreen });
 }
 
 export async function linkLimitReached(userId: string) {

@@ -2,6 +2,7 @@ import { getLink } from "@/models/links-model";
 import { logClick } from "@/models/analytics-model";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
+import LoadingPage from "./loading-page";
 
 export default async function Page({
     params,
@@ -15,5 +16,6 @@ export default async function Page({
     }
     const session = await getSession();
     if (!session) await logClick(link.slug);
+    if (link.loadingScreen) return <LoadingPage redirectUrl={link.url} />;
     redirect(link.url);
 }

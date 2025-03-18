@@ -10,6 +10,11 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft } from "lucide-react";
@@ -24,6 +29,7 @@ export default function CreatePage({ limitReached }: CreatePageProps) {
     const [url, setUrl] = useState("");
     const [customSlug, setCustomSlug] = useState("");
     const [useCustomSlug, setUseCustomSlug] = useState(false);
+    const [loadingScreen, setLoadingScreen] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -151,6 +157,32 @@ export default function CreatePage({ limitReached }: CreatePageProps) {
                             placeholder="https://example.com/your-long-url"
                             onChange={(e) => setUrl(e.target.value)}
                         />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Switch
+                            onClick={() => setLoadingScreen(!loadingScreen)}
+                        />
+                        <Label htmlFor="loading-screen">
+                            Use loading screen
+                        </Label>
+                        <HoverCard>
+                            <HoverCardTrigger>
+                                <Button
+                                    variant="secondary"
+                                    size="icon"
+                                    className="h-6 w-6 rounded-full border"
+                                >
+                                    i
+                                </Button>
+                            </HoverCardTrigger>
+                            <HoverCardContent>
+                                <p>
+                                    Enable this option to use a loading screen
+                                    when the link is clicked. This slows down
+                                    link redirect time.
+                                </p>
+                            </HoverCardContent>
+                        </HoverCard>
                     </div>
                     <div className="flex items-center space-x-2">
                         <Switch

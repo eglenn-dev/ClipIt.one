@@ -4,6 +4,11 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import LoadingPage from "./loading-page";
 
+export const metadata = {
+    title: "Redirecting...",
+    description: "Redirecting to the requested page...",
+};
+
 export default async function Page({
     params,
 }: {

@@ -60,7 +60,7 @@ export default function CreatePage({ limitReached }: CreatePageProps) {
             return;
         }
         setError("");
-        await createLinkAction(url, customSlug);
+        await createLinkAction(url, customSlug, loadingScreen);
     };
 
     useEffect(() => {

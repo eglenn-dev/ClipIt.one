@@ -42,7 +42,7 @@ export async function createLink(
         slug,
         userId,
         createdAt: Date.now(),
-        loadingScreen,
+        loadingScreen: loadingScreen || false,
     });
     return slug;
 }

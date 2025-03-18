@@ -16,7 +16,7 @@ export default function LoadingPage({ redirectUrl }: LoadingPageProps) {
     }, [redirectUrl]);
 
     return (
-        <div className="w-full h-screen overflow-hidden bg-white flex items-center justify-center">
+        <div className="w-full h-screen overflow-hidden flex items-center justify-center">
             <div
                 aria-label="Orange and tan hamster running in a metal wheel"
                 role="img"

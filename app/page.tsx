@@ -12,7 +12,7 @@ export default function LandingPage() {
     useEffect(() => {
         AOS.init({
             duration: 500,
-            delay: 300,
+            delay: 100,
             once: true,
         });
     }, []);
@@ -28,14 +28,14 @@ export default function LandingPage() {
                                 <h1
                                     className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none"
                                     data-aos="fade-up"
-                                    data-aos-delay="500"
+                                    data-aos-delay="100"
                                 >
                                     Shorten, Share, Track
                                 </h1>
                                 <p
                                     className="mx-auto max-w-[700px] text-muted-foreground md:text-xl"
                                     data-aos="fade-up"
-                                    data-aos-delay="800"
+                                    data-aos-delay="200"
                                 >
                                     Create shortened URLs in seconds. Track
                                     clicks, analyze traffic, and generate QR
@@ -45,7 +45,7 @@ export default function LandingPage() {
                             <div
                                 className="space-x-4"
                                 data-aos="fade-up"
-                                data-aos-delay="1100"
+                                data-aos-delay="300"
                             >
                                 <Link href="/home">
                                     <Button className="px-8 py-2 cursor-pointer">
@@ -61,10 +61,11 @@ export default function LandingPage() {
                 <section
                     id="features"
                     className="w-full py-12 md:py-24 lg:py-32 bg-muted"
-                    data-aos="fade-up"
-                    data-aos-delay="1500"
                 >
-                    <div className="container mx-auto px-4 md:px-6">
+                    <div
+                        className="container mx-auto px-4 md:px-6"
+                        data-aos="fade-up"
+                    >
                         <div className="flex flex-col items-center justify-center space-y-4 text-center">
                             <div className="space-y-2">
                                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">

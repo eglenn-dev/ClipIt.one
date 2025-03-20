@@ -1,6 +1,7 @@
 "use client";
 import QRCode from "qrcode";
 import { useEffect, useState } from "react";
+import { Skeleton } from "./ui/skeleton";
 
 interface QRCodeProps {
     url: string;
@@ -30,7 +31,7 @@ export default function QRCodeComponent({
         if (urlCode) urlCode(qrCodeUrl);
     }, [url, size, qrCodeUrl, urlCode]);
 
-    if (!qrCodeUrl) return null;
+    if (!qrCodeUrl) return <Skeleton className={`w-full h-full`} />;
     return (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={qrCodeUrl} alt="QR code for link" />

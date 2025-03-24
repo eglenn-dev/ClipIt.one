@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signup } from "./action";
+import { Link2 } from "lucide-react";
 import LandingHeader from "@/components/landing-header";
 
 export default function SignupPage() {
@@ -44,8 +45,19 @@ export default function SignupPage() {
     return (
         <div className="container mx-auto min-h-screen flex flex-col">
             <LandingHeader />
-            <main className="flex-grow flex flex-col items-center justify-center p-4">
-                <div className="w-full max-w-md space-y-8">
+            <main className="flex flex-col md:grid md:grid-cols-2 p-4 flex-1">
+                <div className="hidden md:flex flex-col items-center justify-center space-y-4 text-center">
+                    <Link2 className="h-20 w-20" />
+                    <h2 className="text-4xl font-bold tracking-tighter text-secondary bg-black px-4 py-2 rounded-xl">
+                        Shorten, Share, Track
+                    </h2>
+                    <p className="text-xl">
+                        ClipIt.one helps you shorten, share and track your links
+                        with ease.
+                    </p>
+                    <p className="text-2xl">Get started for free today!</p>
+                </div>
+                <div className="w-full h-full max-w-md space-y-8 flex flex-col justify-center mx-auto">
                     <div className="text-center">
                         <h2 className="mt-6 text-3xl font-bold">
                             Create your account

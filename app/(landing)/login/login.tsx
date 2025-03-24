@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginAction } from "./action";
+import { Link2 } from "lucide-react";
 import LandingHeader from "@/components/landing-header";
 
 export default function Login() {
@@ -16,8 +17,17 @@ export default function Login() {
     return (
         <div className="container mx-auto min-h-screen flex flex-col">
             <LandingHeader />
-            <main className="flex-grow flex flex-col items-center justify-center p-4">
-                <div className="w-full max-w-md space-y-8">
+            <main className="flex flex-col md:grid md:grid-cols-2 p-4 flex-1">
+                <div className="hidden md:flex flex-col items-center justify-center text-center gap-4">
+                    <h2 className="flex flex-row gap-2 justify-center items-center text-3xl font-bold">
+                        <Link2 className="h-9 w-9 mt-1" />
+                        <Link href="/">ClipIt.one</Link>
+                    </h2>
+                    <h3 className="text-4xl font-bold tracking-tighter text-secondary bg-black px-4 py-2 rounded-xl">
+                        Shorten, Share, Track
+                    </h3>
+                </div>
+                <div className="w-full h-full max-w-md space-y-8 flex flex-col justify-center mx-auto">
                     <div className="text-center">
                         <h2 className="mt-6 text-3xl font-bold">
                             Sign in to your account

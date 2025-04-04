@@ -67,8 +67,7 @@ export default function SlugPage({ link }: SlugPageProps) {
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text).then(
             () => {
-                console.log("Text copied to clipboard");
-                toast("Link has been copied to your clipboard.");
+                toast("Link has been copied to your clipboard 👍");
             },
             (err) => {
                 console.error("Could not copy text: ", err);
@@ -418,12 +417,17 @@ export default function SlugPage({ link }: SlugPageProps) {
                                         <AlertDialogCancel>
                                             Cancel
                                         </AlertDialogCancel>
-                                        <AlertDialogAction
-                                            onClick={() =>
-                                                deleteLinkAction(currentSlug)
-                                            }
-                                        >
-                                            Delete
+                                        <AlertDialogAction className="p-0">
+                                            <Button
+                                                variant="destructive"
+                                                onClick={() =>
+                                                    deleteLinkAction(
+                                                        currentSlug
+                                                    )
+                                                }
+                                            >
+                                                Delete
+                                            </Button>
                                         </AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>

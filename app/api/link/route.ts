@@ -1,5 +1,5 @@
 "use server";
-import { createLink } from "@/models/links-model";
+import { createLink, linkLimitReached } from "@/models/links-model";
 import { validateApiKey, getUserIdForKey } from "@/models/api-key-model";
 
 export async function GET() {
@@ -29,6 +29,36 @@ export async function POST(request: Request) {
     const userId = await getUserIdForKey(apiKey);
     if (!userId) {
         return new Response("User ID not found", { status: 500 });
+    }
+
+    const isLimitReached = await linkLimitReached(userId);
+    if (isLimitReached) {
+        return new Response("Link limit reached", { status: 403 });
+    }
+
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+        return new Response("Invalid URL", { status: 400 });
+    }
+    if (url.length > 2000) {
+        return new Response("URL is too long", { status: 400 });
+    }
+    if (url.includes(" ")) {
+        return new Response("URL contains spaces", { status: 400 });
+    }
+    if (url.includes("javascript:")) {
+        return new Response("URL contains javascript", { status: 400 });
+    }
+    if (url.includes("data:")) {
+        return new Response("URL contains data", { status: 400 });
+    }
+    if (url.includes("mailto:")) {
+        return new Response("URL contains mailto", { status: 400 });
+    }
+    if (url.includes("tel:")) {
+        return new Response("URL contains tel", { status: 400 });
+    }
+    if (url.includes("file:")) {
+        return new Response("URL contains file", { status: 400 });
     }
 
     try {

@@ -68,6 +68,14 @@ export async function getLink(slug: string) {
     return Object.values(snapshot.val())[0] as RedirectLink;
 }
 
+export async function getLinkByKey(key: string) {
+    const snapshot = await linksRef.child(key).get();
+    if (!snapshot.exists()) {
+        return undefined;
+    }
+    return snapshot.val() as RedirectLink;
+}
+
 export async function getKeyBySlug(slug: string) {
     const snapshot = await linksRef.orderByChild("slug").equalTo(slug).get();
     if (!snapshot.exists()) {

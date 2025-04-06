@@ -12,15 +12,28 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Link2, Plus, Search, Copy, QrCode, BarChart2 } from "lucide-react";
+import {
+    Link2,
+    Plus,
+    Search,
+    Copy,
+    QrCode,
+    BarChart2,
+    Clock,
+} from "lucide-react";
 import { RedirectLink } from "@/lib/interfaces";
 
 interface HomeProps {
     links: RedirectLink[];
     limitReached: boolean;
+    lastClickedLink?: RedirectLink;
 }
 
-export default function Home({ links, limitReached }: HomeProps) {
+export default function Home({
+    links,
+    limitReached,
+    lastClickedLink = undefined,
+}: HomeProps) {
     const [filteredLinks, setFilteredLinks] = useState<RedirectLink[]>(links);
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -93,6 +106,28 @@ export default function Home({ links, limitReached }: HomeProps) {
                                 0
                             )}
                         </div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">
+                            Last Clicked Link
+                        </CardTitle>
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        {lastClickedLink ? (
+                            <Link
+                                href={`/home/${lastClickedLink.slug}`}
+                                className="text-xl font-bold underline-offset-4 hover:underline"
+                            >
+                                {lastClickedLink.slug}
+                            </Link>
+                        ) : (
+                            <p className="text-sm text-muted-foreground">
+                                No link clicked yet
+                            </p>
+                        )}
                     </CardContent>
                 </Card>
             </div>
@@ -181,7 +216,7 @@ export default function Home({ links, limitReached }: HomeProps) {
                 </CardContent>
                 <CardFooter className="flex items-center justify-between">
                     <p className="text-sm text-muted-foreground">
-                        Showing {links.length} links
+                        Showing {filteredLinks.length} links
                     </p>
                 </CardFooter>
             </Card>

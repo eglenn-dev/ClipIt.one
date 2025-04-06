@@ -43,9 +43,10 @@ import { updateUrlAction, updateSlugAction, deleteLinkAction } from "./action";
 
 interface SlugPageProps {
     link: RedirectLink;
+    lastClickTime: number | undefined;
 }
 
-export default function SlugPage({ link }: SlugPageProps) {
+export default function SlugPage({ link, lastClickTime }: SlugPageProps) {
     const [urlCode, setUrlCode] = useState("");
     const [timeRange, setTimeRange] = useState("allTime");
     const [isEditingSlug, setIsEditingSlug] = useState(false);
@@ -63,6 +64,25 @@ export default function SlugPage({ link }: SlugPageProps) {
     );
     const clicksPerDay =
         numberActiveDays > 0 ? (link.clicks || 0) / numberActiveDays : 0;
+
+    const lastClickString = () => {
+        if (!lastClickTime) return "Never clicked";
+        const lastClickDate = new Date(lastClickTime);
+        const today = new Date();
+        const isToday = lastClickDate.toDateString() === today.toDateString();
+        return isToday
+            ? `Today at ${lastClickDate.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+              })}`
+            : lastClickDate.toLocaleString([], {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+              });
+    };
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text).then(
@@ -500,6 +520,18 @@ export default function SlugPage({ link }: SlugPageProps) {
                                 : (
                                       getFilteredClicks() / getActiveDays()
                                   ).toFixed(1)}
+                        </div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="pb-2">
+                        <CardTitle className="text-sm font-medium">
+                            Last Clicked On
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">
+                            {lastClickString()}
                         </div>
                     </CardContent>
                 </Card>

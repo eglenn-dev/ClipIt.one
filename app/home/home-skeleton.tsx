@@ -9,7 +9,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Plus, Link2, BarChart2, Search } from "lucide-react";
+import { Plus, Link2, BarChart2, Search, Clock } from "lucide-react";
 
 export default function HomePageSkeleton() {
     return (
@@ -39,6 +39,17 @@ export default function HomePageSkeleton() {
                             Total Clicks
                         </CardTitle>
                         <BarChart2 className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        <Skeleton className="h-8 w-full" />
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">
+                            Last Clicked Link
+                        </CardTitle>
+                        <Clock className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
                         <Skeleton className="h-8 w-full" />

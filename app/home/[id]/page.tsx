@@ -1,5 +1,5 @@
 import { getLink } from "@/models/links-model";
-import { getClicks } from "@/models/analytics-model";
+import { getClicks, getLastClickTime } from "@/models/analytics-model";
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -34,6 +34,7 @@ async function SlugPageWrapper(
     if (!link) redirect("/404");
     if (link.userId !== userId) redirect("/404");
     link.clicks = await getClicks(slug);
+    const lastClickTime = await getLastClickTime(slug);
 
-    return <SlugPage link={link} />;
+    return <SlugPage link={link} lastClickTime={lastClickTime} />;
 }

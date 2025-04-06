@@ -125,6 +125,16 @@ export default function SlugSkeleton() {
                         </div>
                     </CardContent>
                 </Card>
+                <Card>
+                    <CardHeader className="pb-2">
+                        <CardTitle className="text-sm font-medium">
+                            Last Clicked On
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <Skeleton className="w-24 h-6" />
+                    </CardContent>
+                </Card>
             </div>
             <Card id="qr-code">
                 <CardHeader>

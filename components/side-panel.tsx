@@ -1,6 +1,12 @@
 "use client";
 import Link from "next/link";
-import { BarChart3, Plus, LogOutIcon, Settings2Icon } from "lucide-react";
+import {
+    BarChart3,
+    Plus,
+    LogOutIcon,
+    Settings2Icon,
+    QrCodeIcon,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import { logoutAction } from "./action";
 import { usePathname } from "next/navigation";
@@ -36,6 +42,17 @@ export default function SidePanel() {
                 >
                     <Plus className="h-4 w-4" />
                     Create Link
+                </Link>
+                <Link
+                    href="/home/create-qr"
+                    className={
+                        pathname === "/home/create-qr"
+                            ? activeLinkStyles
+                            : inactiveLinkStyles
+                    }
+                >
+                    <QrCodeIcon className="h-4 w-4" />
+                    Create QR Code
                 </Link>
             </nav>
             <div className="p-4 fixed bottom-0 w-fit grid gap-2">

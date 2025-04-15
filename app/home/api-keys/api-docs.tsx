@@ -17,6 +17,20 @@ export default function APIDocs() {
 }`}
             </pre>
             <p className="text-gray-700">
+                The <code>url</code> field is required and must be a valid URL.
+            </p>
+            <p className="text-gray-700">
+                There is an optional <code>slug</code> field that can be used to
+                specify a custom slug for the link. If not provided, a random
+                slug will be generated.
+            </p>
+            <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
+                {`{
+    "url": "https://example.com",
+    "slug": "<custom-slug>"
+}`}
+            </pre>
+            <p className="text-gray-700">
                 Make sure to include the <code>Authorization</code> header with
                 your API key:
             </p>

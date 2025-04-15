@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     }
 
     const apiKey = authHeader.substring("Bearer ".length);
-    const { url } = await request.json();
+    const { url, slug } = await request.json();
 
     if (!url) {
         return new Response("URL is required", { status: 400 });
@@ -61,9 +61,17 @@ export async function POST(request: Request) {
         return new Response("URL contains file", { status: 400 });
     }
 
+    if (slug && slug.length > 20) {
+        return new Response("Slug is too long", { status: 400 });
+    }
+    if (slug && slug.includes(" ")) {
+        return new Response("Slug contains spaces", { status: 400 });
+    }
+
     try {
+        new URL(`https://clipit.one/${slug}`);
         const urlTest = new URL(url);
-        const link = await createLink(urlTest.href, userId);
+        const link = await createLink(urlTest.href, userId, slug || undefined);
         const payload = {
             destinationUrl: urlTest.href,
             linkSlug: link,
@@ -75,6 +83,6 @@ export async function POST(request: Request) {
         return new Response(JSON.stringify(payload), { status: 200 });
     } catch (error) {
         console.error("Error creating link:", error);
-        return new Response("Invalid URL", { status: 400 });
+        return new Response(`${error}`, { status: 400 });
     }
 }

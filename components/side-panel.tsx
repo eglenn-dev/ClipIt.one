@@ -20,7 +20,7 @@ export default function SidePanel() {
 
     return (
         <aside className="hidden w-[200px] flex-col border-r bg-muted/40 md:flex justify-between">
-            <nav className="grid gap-2 p-4">
+            <nav className="grid gap-2 p-4 fixed top-16 w-fit">
                 <Link
                     href="/home"
                     className={

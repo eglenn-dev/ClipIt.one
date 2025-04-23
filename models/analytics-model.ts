@@ -20,6 +20,17 @@ if (!admin.apps.length) {
 const db = admin.database();
 const analyticsRef = db.ref("analytics");
 
+interface LinkClickDate {
+    date: string;
+    clicks: number;
+}
+
+interface LinkAnalytics {
+    [key: string]: {
+        timestamp: string;
+    };
+}
+
 export async function logClick(slug: string) {
     const key = await getKeyBySlug(slug);
     if (!key) return;
@@ -92,4 +103,74 @@ export async function getLastClickedSlugKey(userId: string) {
         }
     }
     return lastClickedSlugKey;
+}
+
+export async function getClicksWithDates(slug: string) {
+    const key = await getKeyBySlug(slug);
+    if (!key) return [{ date: "00/00/0000", clicks: 0 }] as LinkClickDate[];
+    const snapshot = await analyticsRef.child(key).get();
+    if (!snapshot.exists())
+        return [{ date: "00/00/0000", clicks: 0 }] as LinkClickDate[];
+
+    const clicks: LinkAnalytics = snapshot.val() || {};
+    const clickValues = Object.values(clicks);
+
+    if (clickValues.length === 0) {
+        const today = new Date();
+        const formattedToday = today.toLocaleDateString("en-US", {
+            month: "short",
+            day: "2-digit",
+        });
+        return [{ date: formattedToday, clicks: 0 }];
+    }
+
+    const dateMap: { [key: string]: number } = {};
+
+    let minTimestamp = Infinity;
+    clickValues.forEach((click) => {
+        const timestamp = new Date(click.timestamp).getTime();
+        if (timestamp < minTimestamp) {
+            minTimestamp = timestamp;
+        }
+    });
+
+    const startDate = new Date(minTimestamp);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date();
+    endDate.setHours(0, 0, 0, 0);
+
+    const currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+        const formattedDate = currentDate.toLocaleDateString("en-US", {
+            month: "short",
+            day: "2-digit",
+        });
+        dateMap[formattedDate] = 0;
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    for (const click of clickValues) {
+        const date = new Date(click.timestamp).toLocaleDateString("en-US", {
+            month: "short",
+            day: "2-digit",
+        });
+        dateMap[date]++;
+    }
+
+    const clicksWithDates: LinkClickDate[] = Object.entries(dateMap).map(
+        ([date, clicks]) => ({
+            date,
+            clicks,
+        })
+    );
+
+    clicksWithDates.sort((a, b) => {
+        const year = new Date().getFullYear();
+        return (
+            new Date(`${a.date} ${year}`).getTime() -
+            new Date(`${b.date} ${year}`).getTime()
+        );
+    });
+
+    return clicksWithDates;
 }

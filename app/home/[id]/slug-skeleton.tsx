@@ -136,6 +136,16 @@ export default function SlugSkeleton() {
                     </CardContent>
                 </Card>
             </div>
+            <Card className="col-span-2">
+                <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium">
+                        Clicks Chart
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="flex h-[300px] items-center justify-center rounded-md border">
+                    <Skeleton className="w-full h-full" />
+                </CardContent>
+            </Card>
             <Card id="qr-code">
                 <CardHeader>
                     <CardTitle>QR Code</CardTitle>

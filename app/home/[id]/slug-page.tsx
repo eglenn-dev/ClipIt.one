@@ -40,13 +40,24 @@ import {
 } from "@/components/ui/alert-dialog";
 import type { RedirectLink } from "@/lib/interfaces";
 import { updateUrlAction, updateSlugAction, deleteLinkAction } from "./action";
+import LinkAnalyticsChart from "@/components/link-analytics-chart";
+
+interface LinkClickDate {
+    date: string;
+    clicks: number;
+}
 
 interface SlugPageProps {
     link: RedirectLink;
     lastClickTime: number | undefined;
+    datesWithClicks: LinkClickDate[];
 }
 
-export default function SlugPage({ link, lastClickTime }: SlugPageProps) {
+export default function SlugPage({
+    link,
+    lastClickTime,
+    datesWithClicks,
+}: SlugPageProps) {
     const [urlCode, setUrlCode] = useState("");
     const [timeRange, setTimeRange] = useState("allTime");
     const [isEditingSlug, setIsEditingSlug] = useState(false);
@@ -437,7 +448,10 @@ export default function SlugPage({ link, lastClickTime }: SlugPageProps) {
                                         <AlertDialogCancel>
                                             Cancel
                                         </AlertDialogCancel>
-                                        <AlertDialogAction className="p-0">
+                                        <AlertDialogAction
+                                            asChild
+                                            className="bg-destructive hover:bg-red-700"
+                                        >
                                             <Button
                                                 variant="destructive"
                                                 onClick={() =>
@@ -540,6 +554,10 @@ export default function SlugPage({ link, lastClickTime }: SlugPageProps) {
                 Note that clicks do not include times you open the link from a
                 device you are singed in on.
             </div>
+            <LinkAnalyticsChart
+                linkClickDate={datesWithClicks}
+                dateRange={timeRange}
+            />
             <Card id="qr-code">
                 <CardHeader>
                     <CardTitle>QR Code</CardTitle>
